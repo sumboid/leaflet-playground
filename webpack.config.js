@@ -20,8 +20,8 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: isDevelopment ? '[name].css' : '[name].[hash].css',
-      chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',
+      filename: isDevelopment ? '[name].css' : '[name].[fullhash].css',
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[fullhash].css',
     }),
     new CleanWebpackPlugin({cleanStaleWebpackAssets: false}),
     new HtmlWebpackPlugin({
@@ -48,7 +48,9 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
+              modules: {
+                localIdentName: '[name]-[local]-[fullhash:base64:5]',
+              },
               sourceMap: isDevelopment,
             },
           },
@@ -59,6 +61,29 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          isDevelopment
+            ? 'style-loader'
+            : {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  publicPath: '',
+                },
+              },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: isDevelopment,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        loader: 'file-loader',
       },
     ],
   },

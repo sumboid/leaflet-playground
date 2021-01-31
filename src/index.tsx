@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import MainPage from 'pages/main/main.page';
+
 import 'index.module.scss';
-import App from 'pages/main/App';
 
 document.body.innerHTML += '<div id="root"/>';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <MainPage />
   </React.StrictMode>,
   document.getElementById('root')
 );
