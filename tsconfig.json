@@ -6,7 +6,8 @@
     "skipLibCheck": true,
     "jsx": "react",
     "esModuleInterop": true,
-    "lib": ["DOM"]
+    "lib": ["DOM"],
+    "baseUrl": "./src"
   },
   "include": [
     "src/**/*.ts",
