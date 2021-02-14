@@ -9,9 +9,5 @@
     "lib": ["DOM"],
     "baseUrl": "./src"
   },
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts",
-    "src/index.tsx"
-  ]
+  "include": ["src"]
 }

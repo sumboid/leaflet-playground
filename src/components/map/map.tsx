@@ -1,10 +1,13 @@
 import React, {memo} from 'react';
+import {useSelector} from 'react-redux';
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import L, {LatLngExpression} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import marker from 'leaflet/dist/images/marker-icon.png';
 import marker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+import type {RootState} from 'store';
 
 import styles from './map.module.scss';
 
@@ -25,6 +28,8 @@ type Props = {
 const mapStyle = {height: '100%'};
 
 const Map: React.FC<Props> = ({position}) => {
+  const label = useSelector((state: RootState) => state.map.label);
+
   return (
     <div className={styles.root}>
       <MapContainer
@@ -35,7 +40,7 @@ const Map: React.FC<Props> = ({position}) => {
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <Marker position={position}>
-          <Popup>What is that?</Popup>
+          <Popup>{label}</Popup>
         </Marker>
       </MapContainer>
     </div>
