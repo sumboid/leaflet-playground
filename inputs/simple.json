@@ -1,0 +1,18 @@
+[
+  {
+    "center_lat": 54.8434012,
+    "center_lng": 83.0929896,
+    "length": 50,
+    "width": 50,
+    "yaw_angle": 0,
+    "color": "#cccccc"
+  },
+  {
+    "center_lat": 54.8432344,
+    "center_lng": 83.0894378,
+    "length": 50,
+    "width": 50,
+    "yaw_angle": 0,
+    "color": "#ccccaa"
+  }
+]
