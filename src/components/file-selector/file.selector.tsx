@@ -13,9 +13,13 @@ const FileSelector: React.FC<Props> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = useCallback(() => inputRef.current?.click(), [inputRef]);
-  const handleChange = useCallback(e => onSelect(e.target.files?.[0]), [
-    onSelect,
-  ]);
+  const handleChange = useCallback(
+    e => {
+      onSelect(e.target.files?.[0]);
+      e.target.value = null;
+    },
+    [onSelect]
+  );
 
   return (
     <>
