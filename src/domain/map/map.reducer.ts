@@ -5,13 +5,13 @@ import {ConfigT} from './models/config';
 
 type State = {
   label: string;
-  config?: ConfigT;
+  config: ConfigT;
   isLoading: boolean;
 };
 
 const DEFAULT_STATE: State = {
   label: 'What is that?',
-  config: undefined,
+  config: [],
   isLoading: false,
 };
 

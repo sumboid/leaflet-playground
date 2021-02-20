@@ -1,4 +1,5 @@
 import * as t from 'io-ts';
+import LatLon from 'geodesy/latlon-ellipsoidal-vincenty';
 
 export const RawRectangle = t.readonly(
   t.type({
@@ -20,13 +21,41 @@ export type RectangleT = Readonly<{
   width: number;
   yaw: number;
   color: string;
+  gcsPoints: [number, number][];
+  crtPoints: [number, number][];
 }>;
 
-export const transform = (raw: RawRectangleT): RectangleT => ({
-  lat: raw.center_lat,
-  lng: raw.center_lng,
-  length: raw.length,
-  width: raw.width,
-  yaw: raw.yaw_angle,
-  color: raw.color,
-});
+export const transform = (raw: RawRectangleT): RectangleT => {
+  const base = {
+    lat: raw.center_lat,
+    lng: raw.center_lng,
+    length: raw.length,
+    width: raw.width,
+    yaw: raw.yaw_angle,
+    color: raw.color,
+  };
+
+  const center = new LatLon(base.lat, base.lng);
+  const distance = Math.sqrt((base.length / 2) ** 2 + (base.width / 2) ** 2);
+  const lwDeg = Math.atan(base.length / base.width) * (180 / Math.PI);
+  const wlDeg = 90 - lwDeg;
+
+  const lanLatPoints = [
+    base.yaw + lwDeg,
+    base.yaw + 90 + wlDeg,
+    base.yaw - (wlDeg + 90),
+    base.yaw - lwDeg,
+  ].map(brng => center.destinationPoint(distance, brng));
+  const crtPoints = lanLatPoints
+    .map(pt => pt.toCartesian())
+    .map(({x, y}) => [x, y] as [number, number]);
+  const gcsPoints = lanLatPoints.map(
+    pt => [pt.lat, pt.lng] as [number, number]
+  );
+
+  return {
+    ...base,
+    crtPoints,
+    gcsPoints,
+  };
+};

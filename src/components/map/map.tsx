@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import {useSelector} from 'react-redux';
-import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
+import {MapContainer, TileLayer, Marker, Popup, Polygon} from 'react-leaflet';
 import L, {LatLngExpression} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import marker from 'leaflet/dist/images/marker-icon.png';
@@ -28,7 +28,14 @@ type Props = {
 const mapStyle = {height: '100%'};
 
 const Map: React.FC<Props> = ({position}) => {
-  const label = useSelector((state: RootState) => state.map.label);
+  const config = useSelector((state: RootState) => state.map.config);
+  const polygons = config.map((rect, idx) => (
+    <Polygon
+      key={idx}
+      positions={rect.gcsPoints}
+      pathOptions={{color: rect.color, fillColor: rect.color, fillOpacity: 0.5}}
+    />
+  ));
 
   return (
     <div className={styles.root}>
@@ -39,9 +46,7 @@ const Map: React.FC<Props> = ({position}) => {
         style={mapStyle}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <Marker position={position}>
-          <Popup>{label}</Popup>
-        </Marker>
+        {polygons}
       </MapContainer>
     </div>
   );

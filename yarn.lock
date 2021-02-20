@@ -159,6 +159,11 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.46.tgz#0fb6bfbbeabd7a30880504993369c4bf1deab1fe"
   integrity sha512-laIjwTQaD+5DukBZaygQ79K1Z0jb1bPEMRrkXSLjtCcZm+abyp5YbrqpSLzD42FwWW6gK/aS4NYpJ804nG2brg==
 
+"@types/geodesy@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@types/geodesy/-/geodesy-2.2.2.tgz#9880ff6f305cc2bb853f132aba069fa48bc6112f"
+  integrity sha512-Wl48yJWuLC/bNedrFpd7ePVaM6DkE5ss7GT41vWCWZlFOpRU8ahlLjBdS4UXFiRg6bxBxTQ4ppV7Y2C1CLuWFQ==
+
 "@types/geojson@*":
   version "7946.0.7"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.7.tgz#c8fa532b60a0042219cdf173ca21a975ef0666ad"
@@ -2157,6 +2162,11 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
+
+geodesy@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/geodesy/-/geodesy-2.2.1.tgz#9d06cbd83d37cd11fb264abad18524b4b45a3a8f"
+  integrity sha512-jhUYGHFZz5hZ/f+lBZiwFNWRhOUV2iiVxyLOT8FixIUJHEDVMgcB1SWQs50P51uTVcVjsngjPAUUNWcWdWiPog==
 
 get-caller-file@^2.0.1:
   version "2.0.5"

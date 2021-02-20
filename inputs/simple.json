@@ -2,17 +2,17 @@
   {
     "center_lat": 54.8434012,
     "center_lng": 83.0929896,
-    "length": 50,
-    "width": 50,
-    "yaw_angle": 0,
-    "color": "#cccccc"
+    "length": 100,
+    "width": 200,
+    "yaw_angle": -90,
+    "color": "#00ffff"
   },
   {
     "center_lat": 54.8432344,
     "center_lng": 83.0894378,
-    "length": 50,
-    "width": 50,
+    "length": 100,
+    "width": 80,
     "yaw_angle": 0,
-    "color": "#ccccaa"
+    "color": "#ffff00"
   }
 ]
