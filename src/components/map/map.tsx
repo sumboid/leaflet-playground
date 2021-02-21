@@ -1,6 +1,13 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {MapContainer, TileLayer, Marker, Popup, Polygon} from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polygon,
+  useMap,
+} from 'react-leaflet';
 import L, {LatLngExpression} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import marker from 'leaflet/dist/images/marker-icon.png';
@@ -21,6 +28,18 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+const MapController: React.FC<{bounds: [number, number][]}> = memo(
+  ({bounds}) => {
+    const map = useMap();
+
+    useEffect(() => {
+      map.fitBounds(bounds);
+    }, [bounds]);
+
+    return null;
+  }
+);
+
 type Props = {
   position: LatLngExpression;
 };
@@ -29,6 +48,7 @@ const mapStyle = {height: '100%'};
 
 const Map: React.FC<Props> = ({position}) => {
   const config = useSelector((state: RootState) => state.map.config);
+  const bounds = useSelector((state: RootState) => state.map.bounds);
   const polygons = config.map((rect, idx) => (
     <Polygon
       key={idx}
@@ -45,6 +65,7 @@ const Map: React.FC<Props> = ({position}) => {
         scrollWheelZoom={true}
         style={mapStyle}
       >
+        <MapController bounds={bounds} />
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {polygons}
       </MapContainer>
