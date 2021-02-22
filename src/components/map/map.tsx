@@ -1,13 +1,6 @@
 import React, {memo, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Polygon,
-  useMap,
-} from 'react-leaflet';
+import {MapContainer, TileLayer, Polygon, useMap} from 'react-leaflet';
 import L, {LatLngExpression} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import marker from 'leaflet/dist/images/marker-icon.png';
@@ -48,12 +41,20 @@ const mapStyle = {height: '100%'};
 
 const Map: React.FC<Props> = ({position}) => {
   const config = useSelector((state: RootState) => state.map.config);
+  const overlappingReact = useSelector(
+    (state: RootState) => state.map.overlappingRects
+  );
+
   const bounds = useSelector((state: RootState) => state.map.bounds);
   const polygons = config.map((rect, idx) => (
     <Polygon
       key={idx}
       positions={rect.gcsPoints}
-      pathOptions={{color: rect.color, fillColor: rect.color, fillOpacity: 0.5}}
+      pathOptions={{
+        color: overlappingReact.has(idx) ? 'red' : rect.color,
+        fillColor: rect.color,
+        fillOpacity: 0.5,
+      }}
     />
   ));
 

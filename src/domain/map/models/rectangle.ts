@@ -21,7 +21,11 @@ export type RectangleT = Readonly<{
   width: number;
   yaw: number;
   color: string;
+  center: [number, number];
+  outerR: number;
+  // [left-top, left-bottom, right-bottom, right-top]
   gcsPoints: [number, number][];
+  // [left-top, left-bottom, right-bottom, right-top]
   crtPoints: [number, number][];
 }>;
 
@@ -52,9 +56,12 @@ export const transform = (raw: RawRectangleT): RectangleT => {
   const gcsPoints = lanLatPoints.map(
     pt => [pt.lat, pt.lng] as [number, number]
   );
+  const crtCenter = center.toCartesian();
 
   return {
     ...base,
+    center: [crtCenter.x, crtCenter.y],
+    outerR: distance,
     crtPoints,
     gcsPoints,
   };

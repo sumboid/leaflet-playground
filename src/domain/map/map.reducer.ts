@@ -6,12 +6,14 @@ import {RectangleT} from './models/rectangle';
 
 type State = {
   config: ConfigT;
+  overlappingRects: Set<number>;
   bounds: [number, number][];
   isLoading: boolean;
 };
 
 const DEFAULT_STATE: State = {
   config: [],
+  overlappingRects: new Set(),
   bounds: [
     [54.8209536, 83.0806083],
     [54.8813348, 83.1260342],
@@ -28,24 +30,28 @@ export default createReducer(DEFAULT_STATE)
     ...state,
     isLoading: false,
   }))
-  .handleAction(Actions.loadConfig.success, (state, {payload: config}) => ({
-    ...state,
-    config,
-    bounds: [
-      [
-        config.reduce((r, p) => Math.min(r, minLat(p)), Infinity),
-        config.reduce((r, p) => Math.min(r, minLng(p)), Infinity),
-      ],
-      [
-        config.reduce((r, p) => Math.max(r, maxLat(p)), -Infinity),
-        config.reduce((r, p) => Math.max(r, maxLng(p)), -Infinity),
-      ],
-    ].map(
-      (xs, i) =>
-        xs.map((x, j) => adjust(x, state.bounds[i][j])) as [number, number]
-    ),
-    isLoading: false,
-  }));
+  .handleAction(
+    Actions.loadConfig.success,
+    (state, {payload: {config, overlappingRects}}) => ({
+      ...state,
+      config,
+      overlappingRects,
+      bounds: [
+        [
+          config.reduce((r, p) => Math.min(r, minLat(p)), Infinity),
+          config.reduce((r, p) => Math.min(r, minLng(p)), Infinity),
+        ],
+        [
+          config.reduce((r, p) => Math.max(r, maxLat(p)), -Infinity),
+          config.reduce((r, p) => Math.max(r, maxLng(p)), -Infinity),
+        ],
+      ].map(
+        (xs, i) =>
+          xs.map((x, j) => adjust(x, state.bounds[i][j])) as [number, number]
+      ),
+      isLoading: false,
+    })
+  );
 
 const adjust = (val: number, def: number) =>
   [Infinity, -Infinity].includes(val) ? def : val;

@@ -5,4 +5,4 @@ export const loadConfig = createAsyncAction(
   'CONFIG_LOAD_REQUESTED',
   'CONFIG_LOAD_SUCCEDED',
   'CONFIG_LOAD_FAILED'
-)<File, ConfigT, Error>();
+)<File, {config: ConfigT; overlappingRects: Set<number>}, Error>();

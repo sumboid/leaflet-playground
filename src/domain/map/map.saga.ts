@@ -1,13 +1,14 @@
 import {put, PutEffect, takeEvery, takeLatest} from 'redux-saga/effects';
 import {ActionType, isActionOf} from 'typesafe-actions';
-import {pipe} from 'fp-ts/lib/pipeable';
-import {chain, fold, mapLeft, parseJSON, toError} from 'fp-ts/lib/Either';
+import {pipe} from 'fp-ts/function';
+import * as E from 'fp-ts/Either';
 
 import settings from 'settings';
 
 import * as Actions from './map.actions';
 import {transform} from './models/rectangle';
-import {RawConfig, RawConfigT} from './models/config';
+import {ConfigT, RawConfig} from './models/config';
+import {hasIntersection} from './map.utils';
 
 export default function* () {
   yield takeLatest(
@@ -37,18 +38,53 @@ function* handleConfigLoadRequested({
   }
 
   const content: string = yield file.text();
-  const decode = (i: unknown) =>
-    pipe(
-      RawConfig.decode(i),
-      mapLeft(() => Error('Failed to decode config'))
-    );
+  const configE = pipe(
+    E.parseJSON(content, E.toError),
+    E.chain((i: unknown) =>
+      pipe(
+        RawConfig.decode(i),
+        E.mapLeft(() => Error('Failed to decode config'))
+      )
+    ),
+    E.map(rawConfig => rawConfig.map(transform))
+  );
+
+  const overlappingRects = pipe(
+    configE,
+    E.map(config =>
+      config.reduce((res, rect, i) => {
+        if (res.has(i)) {
+          return res;
+        }
+
+        const idx = config.findIndex((x, idx) =>
+          idx === i ? false : hasIntersection(x)(rect)
+        );
+
+        if (idx >= 0) {
+          res.add(i);
+          res.add(idx);
+        }
+
+        return res;
+      }, new Set<number>())
+    )
+  );
 
   yield pipe(
-    parseJSON(content, toError),
-    chain(decode),
-    fold<Error, RawConfigT, PutEffect>(
+    configE,
+    E.fold<Error, ConfigT, PutEffect>(
       error => put(Actions.loadConfig.failure(error)),
-      config => put(Actions.loadConfig.success(config.map(transform)))
+      config =>
+        put(
+          Actions.loadConfig.success({
+            config,
+            overlappingRects: pipe(
+              overlappingRects,
+              E.getOrElse(() => new Set<number>())
+            ),
+          })
+        )
     )
   );
 }

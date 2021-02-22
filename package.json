@@ -5,6 +5,7 @@
   "dependencies": {
     "fp-ts": "^2.9.5",
     "geodesy": "^2.2.1",
+    "immutable": "^4.0.0-rc.12",
     "io-ts": "^2.2.14",
     "leaflet": "^1.7.1",
     "react": "^17.0.1",
