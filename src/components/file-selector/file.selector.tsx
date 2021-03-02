@@ -1,6 +1,6 @@
 import React, {memo, useCallback, useRef} from 'react';
 
-import styles from './styles/file.selector.module.scss';
+import styles from './file.selector.module.scss';
 
 type Props = {
   accept?: string;

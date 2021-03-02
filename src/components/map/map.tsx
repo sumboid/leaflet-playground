@@ -8,6 +8,7 @@ import marker2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
 import type {RootState} from 'store';
+import settings from 'settings';
 
 import styles from './map.module.scss';
 
@@ -33,13 +34,9 @@ const MapController: React.FC<{bounds: [number, number][]}> = memo(
   }
 );
 
-type Props = {
-  position: LatLngExpression;
-};
-
 const mapStyle = {height: '100%'};
 
-const Map: React.FC<Props> = ({position}) => {
+const Map: React.FC<{}> = () => {
   const config = useSelector((state: RootState) => state.map.config);
   const overlappingReact = useSelector(
     (state: RootState) => state.map.overlappingRects
@@ -61,7 +58,7 @@ const Map: React.FC<Props> = ({position}) => {
   return (
     <div className={styles.root}>
       <MapContainer
-        center={position}
+        center={settings.DEFAULT_POSITION}
         zoom={13}
         scrollWheelZoom={true}
         style={mapStyle}
