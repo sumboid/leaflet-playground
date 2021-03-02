@@ -32,11 +32,8 @@ export default createReducer(DEFAULT_STATE)
   }))
   .handleAction(
     Actions.loadConfig.success,
-    (state, {payload: {config, overlappingRects}}) => ({
-      ...state,
-      config,
-      overlappingRects,
-      bounds: [
+    (state, {payload: {config, overlappingRects}}) => {
+      const newBounds = [
         [
           config.reduce((r, p) => Math.min(r, minLat(p)), Infinity),
           config.reduce((r, p) => Math.min(r, minLng(p)), Infinity),
@@ -45,16 +42,23 @@ export default createReducer(DEFAULT_STATE)
           config.reduce((r, p) => Math.max(r, maxLat(p)), -Infinity),
           config.reduce((r, p) => Math.max(r, maxLng(p)), -Infinity),
         ],
-      ].map(
-        (xs, i) =>
-          xs.map((x, j) => adjust(x, state.bounds[i][j])) as [number, number]
-      ),
-      isLoading: false,
-    })
-  );
+      ] as [number, number][];
 
-const adjust = (val: number, def: number) =>
-  [Infinity, -Infinity].includes(val) ? def : val;
+      const bounds = newBounds.some(xs =>
+        xs.some(x => [Infinity, -Infinity].includes(x))
+      )
+        ? state.bounds
+        : newBounds;
+
+      return {
+        ...state,
+        config,
+        overlappingRects,
+        bounds,
+        isLoading: false,
+      };
+    }
+  );
 
 const minLat = (rect: RectangleT) =>
   rect.gcsPoints.reduce((r, p) => Math.min(r, p[0]), Infinity);
